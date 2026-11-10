@@ -111,15 +111,56 @@ def plot(daily, output):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    fig, axes = plt.subplots(2,1,figsize=(11,6),sharex=True,layout='constrained')
-    for mode, frame in daily.query("mode == 'global' and cost_bps == 0 and extra_delay == 0").groupby('mode'):
-        nav = np.r_[1.,np.cumprod(1+frame.net_return)]
-        axes[0].plot(frame.date, nav[1:], label=mode)
-        axes[1].plot(frame.date, (nav/np.maximum.accumulate(nav)-1)[1:]*100)
-    axes[0].set(ylabel='Gross research portfolio value', title='Signature lead-lag | Historical sample | Idealized same-close execution')
-    axes[0].legend(frameon=False)
-    axes[1].set(ylabel='Drawdown (%)', xlabel='Date')
-    fig.savefig(output/'performance.png',dpi=150);plt.close(fig)
+    import matplotlib.dates as mdates
+    from matplotlib.ticker import PercentFormatter, MaxNLocator, MultipleLocator
+
+    frame = daily.query("mode == 'global' and cost_bps == 0 and extra_delay == 0").sort_values('date')
+    if frame.empty:
+        raise ValueError('No global gross observations to plot')
+    dates = pd.DatetimeIndex(pd.to_datetime(frame.date))
+    nav = np.r_[1., np.cumprod(1+frame.net_return.to_numpy())]
+    drawdown = (nav/np.maximum.accumulate(nav)-1)[1:]
+    worst = int(np.argmin(drawdown))
+
+    with plt.rc_context({'font.size':10, 'axes.titleweight':'semibold',
+                         'axes.spines.top':False, 'axes.spines.right':False,
+                         'axes.spines.left':False, 'axes.edgecolor':'#cbd5e1',
+                         'text.color':'#1e293b', 'axes.labelcolor':'#475569',
+                         'xtick.color':'#64748b', 'ytick.color':'#64748b'}):
+        fig, axes = plt.subplots(2,1,figsize=(11,6.3),sharex=True,
+                                 gridspec_kw={'height_ratios':[2,1]},layout='constrained')
+        fig.suptitle('Global lead-lag portfolio',fontsize=17,x=.065,ha='left')
+        axes[0].set_title('Gross historical simulation · idealized same-close execution',
+                          loc='left',fontsize=10,fontweight='normal',color='#64748b',pad=12)
+        axes[0].plot(dates,100*nav[1:],color='#2563eb',linewidth=1.5)
+        axes[0].set_ylabel('Portfolio value\ninitial = 100',labelpad=12)
+        axes[0].yaxis.set_major_locator(MaxNLocator(nbins=4))
+
+        axes[1].fill_between(dates,drawdown,0,color='#dc6b6b',alpha=.35,linewidth=0)
+        axes[1].plot(dates,drawdown,color='#b54b4b',linewidth=.65)
+        axes[1].axhline(0,color='#94a3b8',linewidth=.8)
+        axes[1].set_ylabel('Drawdown',labelpad=12)
+        axes[1].set_title('Drawdown from the running peak',loc='left',fontsize=10,fontweight='normal',pad=10)
+        axes[1].text(1,1.055,f'Maximum: {drawdown[worst]:.2%}',transform=axes[1].transAxes,
+                      ha='right',va='bottom',fontsize=10,color='#9f3535')
+        axes[1].yaxis.set_major_formatter(PercentFormatter(1,decimals=0))
+        axes[1].set_ylim(min(-.05,np.floor(drawdown.min()/.05)*.05),.012)
+        axes[1].yaxis.set_major_locator(MultipleLocator(.05))
+        axes[1].scatter(dates[worst],drawdown[worst],s=20,color='#9f3535',zorder=3)
+        axes[1].annotate(f'{drawdown[worst]:.2%}',
+                         xy=(dates[worst],drawdown[worst]),xytext=(10,8),
+                         textcoords='offset points',fontsize=9,color='#9f3535',
+                         arrowprops={'arrowstyle':'-','color':'#9f3535','linewidth':.8},
+                         bbox={'facecolor':'white','edgecolor':'none','alpha':.8,'pad':2})
+        locator = mdates.MonthLocator(bymonth=[1,7])
+        axes[1].xaxis.set_major_locator(locator)
+        axes[1].xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+        for ax in axes:
+            ax.set_axisbelow(True)
+            ax.grid(axis='y',color='#e2e8f0',linewidth=.7)
+            ax.tick_params(axis='both',which='both',length=0,pad=6)
+            ax.margins(x=.01)
+        fig.savefig(output/'performance.png',dpi=180,facecolor='white');plt.close(fig)
 
 
 def main():
