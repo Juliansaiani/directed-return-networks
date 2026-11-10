@@ -122,45 +122,38 @@ def plot(daily, output):
     drawdown = (nav/np.maximum.accumulate(nav)-1)[1:]
     worst = int(np.argmin(drawdown))
 
-    with plt.rc_context({'font.size':10, 'axes.titleweight':'semibold',
-                         'axes.spines.top':False, 'axes.spines.right':False,
-                         'axes.spines.left':False, 'axes.edgecolor':'#cbd5e1',
-                         'text.color':'#1e293b', 'axes.labelcolor':'#475569',
-                         'xtick.color':'#64748b', 'ytick.color':'#64748b'}):
-        fig, axes = plt.subplots(2,1,figsize=(11,6.3),sharex=True,
-                                 gridspec_kw={'height_ratios':[2,1]},layout='constrained')
-        fig.suptitle('Directed Return Networks',fontsize=17,x=.065,ha='left')
-        axes[0].set_title('Global portfolio · gross historical simulation · idealized same-close execution',
-                          loc='left',fontsize=10,fontweight='normal',color='#64748b',pad=12)
-        axes[0].plot(dates,100*nav[1:],color='#2563eb',linewidth=1.5)
-        axes[0].set_ylabel('Portfolio value\ninitial = 100',labelpad=12)
-        axes[0].yaxis.set_major_locator(MaxNLocator(nbins=4))
+    # Match the default Matplotlib typography and axes used by pca-kalman-stat-arb.
+    with plt.rc_context():
+        plt.style.use('default')
+        fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True,
+                                 gridspec_kw={'height_ratios': [2, 1]})
+        axes[0].plot(dates, nav[1:], color='tab:blue', lw=1.6)
+        axes[0].set_title('Global portfolio | Gross, idealized same-close execution')
+        axes[0].set_ylabel('Growth of 1')
+        axes[0].yaxis.set_major_locator(MaxNLocator(nbins=5, steps=[1, 2, 5, 10]))
 
-        axes[1].fill_between(dates,drawdown,0,color='#dc6b6b',alpha=.35,linewidth=0)
-        axes[1].plot(dates,drawdown,color='#b54b4b',linewidth=.65)
-        axes[1].axhline(0,color='#94a3b8',linewidth=.8)
-        axes[1].set_ylabel('Drawdown',labelpad=12)
-        axes[1].set_title('Drawdown from the running peak',loc='left',fontsize=10,fontweight='normal',pad=10)
-        axes[1].text(1,1.055,f'Maximum: {drawdown[worst]:.2%}',transform=axes[1].transAxes,
-                      ha='right',va='bottom',fontsize=10,color='#9f3535')
-        axes[1].yaxis.set_major_formatter(PercentFormatter(1,decimals=0))
-        axes[1].set_ylim(min(-.05,np.floor(drawdown.min()/.05)*.05),.012)
+        axes[1].fill_between(dates, drawdown, 0, color='tab:red', alpha=.2, linewidth=0)
+        axes[1].plot(dates, drawdown, color='tab:red', lw=1.)
+        axes[1].axhline(0, color='black', lw=.7)
+        axes[1].set_title('Drawdown')
+        axes[1].set_ylabel('Drawdown (%)')
+        axes[1].yaxis.set_major_formatter(PercentFormatter(1, decimals=0))
+        axes[1].set_ylim(min(-.05, np.floor(drawdown.min()/.05)*.05), .012)
         axes[1].yaxis.set_major_locator(MultipleLocator(.05))
-        axes[1].scatter(dates[worst],drawdown[worst],s=20,color='#9f3535',zorder=3)
-        axes[1].annotate(f'{drawdown[worst]:.2%}',
-                         xy=(dates[worst],drawdown[worst]),xytext=(10,8),
-                         textcoords='offset points',fontsize=9,color='#9f3535',
-                         arrowprops={'arrowstyle':'-','color':'#9f3535','linewidth':.8},
-                         bbox={'facecolor':'white','edgecolor':'none','alpha':.8,'pad':2})
-        locator = mdates.MonthLocator(bymonth=[1,7])
-        axes[1].xaxis.set_major_locator(locator)
-        axes[1].xaxis.set_major_formatter(mdates.ConciseDateFormatter(locator))
+        axes[1].scatter(dates[worst], drawdown[worst], s=18, color='tab:red', zorder=3)
+        axes[1].text(.99, .04, f'Maximum drawdown: {drawdown[worst]:.2%}',
+                      transform=axes[1].transAxes, ha='right', va='bottom',
+                      fontsize=9, color='tab:red')
         for ax in axes:
-            ax.set_axisbelow(True)
-            ax.grid(axis='y',color='#e2e8f0',linewidth=.7)
-            ax.tick_params(axis='both',which='both',length=0,pad=6)
-            ax.margins(x=.01)
-        fig.savefig(output/'directed-return-networks.png',dpi=180,facecolor='white');plt.close(fig)
+            ax.set_xlim(dates[0], dates[-1])
+            ax.xaxis.set_major_locator(mdates.YearLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+            ax.grid(alpha=.2)
+            ax.spines[['top', 'right']].set_visible(False)
+        fig.suptitle(f'Directed Return Networks | {dates[0].date()} to {dates[-1].date()}', fontsize=14)
+        fig.tight_layout(rect=(0, 0, 1, .95))
+        fig.savefig(output/'overview.png', dpi=150)
+        plt.close(fig)
 
 
 def main():

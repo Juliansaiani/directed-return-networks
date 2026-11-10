@@ -10,7 +10,7 @@ The recorded sample has 57 assets and runs from 21 August 2019 to 5 November 202
 
 Sharpe uses arithmetic daily mean divided by sample standard deviation, annualized by sqrt(365.25). Gross means no transaction, funding or borrowing costs. The zero-delay convention assumes execution at the same close used to form the signal. Dollar-neutral weights do not establish market-beta neutrality.
 
-![Gross research portfolio values and drawdowns](artifacts/directed-return-networks.png)
+![Gross research portfolio values and drawdowns](artifacts/overview.png)
 
 ## Execution sensitivity
 
