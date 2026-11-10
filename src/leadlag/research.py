@@ -129,8 +129,8 @@ def plot(daily, output):
                          'xtick.color':'#64748b', 'ytick.color':'#64748b'}):
         fig, axes = plt.subplots(2,1,figsize=(11,6.3),sharex=True,
                                  gridspec_kw={'height_ratios':[2,1]},layout='constrained')
-        fig.suptitle('Global lead-lag portfolio',fontsize=17,x=.065,ha='left')
-        axes[0].set_title('Gross historical simulation · idealized same-close execution',
+        fig.suptitle('Directed Return Networks',fontsize=17,x=.065,ha='left')
+        axes[0].set_title('Global portfolio · gross historical simulation · idealized same-close execution',
                           loc='left',fontsize=10,fontweight='normal',color='#64748b',pad=12)
         axes[0].plot(dates,100*nav[1:],color='#2563eb',linewidth=1.5)
         axes[0].set_ylabel('Portfolio value\ninitial = 100',labelpad=12)
@@ -160,7 +160,7 @@ def plot(daily, output):
             ax.grid(axis='y',color='#e2e8f0',linewidth=.7)
             ax.tick_params(axis='both',which='both',length=0,pad=6)
             ax.margins(x=.01)
-        fig.savefig(output/'performance.png',dpi=180,facecolor='white');plt.close(fig)
+        fig.savefig(output/'directed-return-networks.png',dpi=180,facecolor='white');plt.close(fig)
 
 
 def main():

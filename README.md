@@ -1,4 +1,4 @@
-# Signature lead-lag networks
+# Directed Return Networks
 
 Daily cryptocurrency lead-lag research using level-two path signatures and directed networks. The global portfolio follows recent leaders through a basket of followers, offset by a hedge across the observable universe.
 
@@ -10,7 +10,7 @@ The recorded sample has 57 assets and runs from 21 August 2019 to 5 November 202
 
 Sharpe uses arithmetic daily mean divided by sample standard deviation, annualized by sqrt(365.25). Gross means no transaction, funding or borrowing costs. The zero-delay convention assumes execution at the same close used to form the signal. Dollar-neutral weights do not establish market-beta neutrality.
 
-![Gross research portfolio values and drawdowns](artifacts/performance.png)
+![Gross research portfolio values and drawdowns](artifacts/directed-return-networks.png)
 
 ## Execution sensitivity
 
@@ -29,6 +29,8 @@ The signature calculation is vectorized in NumPy and checked against an independ
 ## Run
 
 ```bash
+git clone https://github.com/julian5422/directed-return-networks.git
+cd directed-return-networks
 python -m venv .venv
 # Activate the environment, then:
 python -m pip install -r requirements.txt
