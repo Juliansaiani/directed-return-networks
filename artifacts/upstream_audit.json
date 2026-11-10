@@ -1,0 +1,11 @@
+{
+  "upstream": "ARahimiQuant/lead-lag-portfolios",
+  "revision": "e02c2fbd62b8d823bbb605b6234a88a565fafee6",
+  "data_sha256": "e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b",
+  "compatibility_changes": [
+    "pandas positional indexing via iloc",
+    "exact piecewise-linear level-2 signature in NumPy",
+    "vectorized pairwise Levy areas"
+  ],
+  "normalized_matrix_hermitian_defect": 1.676689298966408
+}
