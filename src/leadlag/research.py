@@ -112,7 +112,7 @@ def plot(daily, output):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(2,1,figsize=(11,6),sharex=True,layout='constrained')
-    for mode, frame in daily.query('cost_bps == 0 and extra_delay == 0').groupby('mode'):
+    for mode, frame in daily.query("mode == 'global' and cost_bps == 0 and extra_delay == 0").groupby('mode'):
         nav = np.r_[1.,np.cumprod(1+frame.net_return)]
         axes[0].plot(frame.date, nav[1:], label=mode)
         axes[1].plot(frame.date, (nav/np.maximum.accumulate(nav)-1)[1:]*100)
