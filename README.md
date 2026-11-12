@@ -42,5 +42,3 @@ python -m leadlag.research
 The runner downloads the pinned price CSV and checks its SHA-256. Raw prices remain in an ignored cache. The [executed notebook](notebooks/research.ipynb) presents the global portfolio, subperiods and block-bootstrap intervals. Target weights, daily returns and the run manifest are in `artifacts/`.
 
 Additional comparisons are kept in [experiments/](experiments/README.md). The full runner also rebuilds those comparisons, which takes several minutes.
-
-Implementation/data reference: [ARahimiQuant/lead-lag-portfolios](https://github.com/ARahimiQuant/lead-lag-portfolios), pinned in `config.json`; its MIT notice is retained in [LICENSE](LICENSE). Method references: [Bennett, Cucuringu and Reinert](https://arxiv.org/abs/2201.08283) and [Chevyrev and Kormilitzin](https://arxiv.org/abs/1603.03788). Market-data terms are separate.
