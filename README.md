@@ -9,7 +9,7 @@ The objective of this research is to detect and systematically exploit cross-ass
 
 ### Key Achievements
 - **High Standalone Gross Compounding:** Delivered a cumulative gross return of **+333.19% (4.33x capital compounding)** over the 4.2-year sample (21 August 2019 to 5 November 2023, 1,538 daily observations), translating to a **+41.64% CAGR**.
-- **Strong Risk-Adjusted Gross Sharpe Ratio:** Delivered an annualized gross Sharpe ratio of **1.41** ($r_f = 0\%$) and **1.34** under a 2% cash rate assumption, annualized by $\sqrt{365.25}$ for continuous 24/7/365 digital asset trading.
+- **Strong Risk-Adjusted Gross Sharpe Ratio:** Delivered an annualized gross Sharpe ratio of **1.41**, annualized by $\sqrt{365.25}$ for continuous 24/7/365 digital asset trading.
 - **Robust Multi-Cycle Persistence:**
   - **2019–2021 (Expansion & Crash Cycle):** Compounded capital by **+150.70%** (CAGR **+47.48%**, Sharpe **1.35**, Max Drawdown -23.21%).
   - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79%** (CAGR **+34.50%**, Sharpe **1.72**, Max Drawdown **-8.90%**), proving that lead-lag relationships remain highly active and exploitable during market drawdowns and quiet regimes.
@@ -25,17 +25,17 @@ The evaluation horizon covers 57 digital assets from 21 August 2019 to 5 Novembe
 
 ### Full-Period Gross Performance (2019–2023)
 
-| Portfolio Strategy | Total Return | CAGR | Annual Volatility | Gross Sharpe (0% rf) | Sharpe (2% rf) | Max Drawdown | Daily Turnover |
-|:---|---:|---:|---:|---:|---:|---:|---:|
-| **Global Lead-Lag (Gross)** | **+333.19%** | **+41.64%** | **27.27%** | **1.41** | **1.34** | **-23.21%** | 1.90x NAV |
-| **Clustered Lead-Lag (Gross)** | **+10.49%** | **+2.40%** | **27.33%** | **0.22** | 0.15 | **-40.95%** | 2.06x NAV |
+| Portfolio Strategy | Total Return | CAGR | Annual Volatility | Gross Sharpe | Max Drawdown | Daily Turnover |
+|:---|---:|---:|---:|---:|---:|---:|
+| **Global Lead-Lag (Gross)** | **+333.19%** | **+41.64%** | **27.27%** | **1.41** | **-23.21%** | 1.90x NAV |
+| **Clustered Lead-Lag (Gross)** | **+10.49%** | **+2.40%** | **27.33%** | **0.22** | **-40.95%** | 2.06x NAV |
 
 ### Historical Sub-Period Breakdown
 
-| Sub-Period | Trading Dates | Total Return | CAGR | Annual Volatility | Sharpe (0% rf) | Sharpe (2% rf) | Max Drawdown | Daily Turnover |
-|:---|:---:|---:|---:|---:|---:|---:|---:|---:|
-| **2019–2021 (Expansion & Shock)** | 2019-08-21 to 2021-12-31 | **+150.70%** | **+47.48%** | 32.63% | **1.35** | 1.29 | -23.21% | 1.90x NAV |
-| **2022–2023 (Bear Market & Parity)** | 2022-01-01 to 2023-11-05 | **+72.79%** | **+34.50%** | 18.24% | **1.72** | 1.61 | **-8.90%** | 1.90x NAV |
+| Sub-Period | Trading Dates | Total Return | CAGR | Annual Volatility | Gross Sharpe | Max Drawdown | Daily Turnover |
+|:---|:---:|---:|---:|---:|---:|---:|---:|
+| **2019–2021 (Expansion & Shock)** | 2019-08-21 to 2021-12-31 | **+150.70%** | **+47.48%** | 32.63% | **1.35** | -23.21% | 1.90x NAV |
+| **2022–2023 (Bear Market & Parity)** | 2022-01-01 to 2023-11-05 | **+72.79%** | **+34.50%** | 18.24% | **1.72** | **-8.90%** | 1.90x NAV |
 
 ![Gross research portfolio values and drawdowns](artifacts/overview.png)
 
