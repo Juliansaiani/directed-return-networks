@@ -150,7 +150,7 @@ def plot(daily, output):
                                  label='1 bps Institutional Execution Friction')
         
         axes[0].axhline(1.0, color='black', lw=0.8, linestyle=':', alpha=0.6)
-        axes[0].set_title('Global Lead-Lag Portfolio | Continuous Compounding (24/7/365)\nGross (0 bps) vs Net (1 bps) Institutional Execution',
+        axes[0].set_title('Directed Information Flow Portfolio | Continuous Compounding (24/7/365)\nGross (0 bps) vs Net (1 bps) Institutional Execution',
                           fontsize=12, fontweight='bold', pad=8)
         axes[0].set_ylabel('Growth of $1.00', fontsize=10)
         axes[0].yaxis.set_major_locator(MaxNLocator(nbins=6, steps=[1, 2, 5, 10]))
@@ -182,7 +182,7 @@ def plot(daily, output):
             ax.grid(True, linestyle='--', alpha=0.3)
             ax.spines[['top', 'right']].set_visible(False)
 
-        fig.suptitle(f'Directed Return Networks: Path Signatures & Lead-Lag Crypto Arbitrage ({dates[0].date()} to {dates[-1].date()})',
+        fig.suptitle(f'Directed Return Networks: Path Signatures & Asymmetric Information Flow ({dates[0].date()} to {dates[-1].date()})',
                      fontsize=13, fontweight='bold', y=0.98)
         fig.tight_layout(rect=(0, 0, 1, 0.95))
         fig.savefig(output/'overview.png', dpi=180, bbox_inches='tight')

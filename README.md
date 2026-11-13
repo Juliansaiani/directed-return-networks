@@ -1,11 +1,11 @@
-# Directed Return Networks: Level-Two Path Signatures & Lead-Lag Crypto Arbitrage
+# Directed Return Networks: Level-Two Path Signatures & Asymmetric Information Flow Arbitrage
 
-Cross-sectional lead-lag network research across 57 liquid cryptocurrencies. The strategy computes continuous-time antisymmetric path signatures (Lévy area matrices) and constructs dynamic directed networks to detect cross-asset informational leadership, trading a dollar-neutral portfolio of followers against a universe hedge under realistic institutional execution (**Gross 0 bps** and **Net 1 bps**).
+Cross-sectional directed network research across 57 liquid cryptocurrencies. The strategy computes continuous-time antisymmetric path signatures (Lévy area matrices) and constructs dynamic directed networks to detect cross-asset informational centrality and asymmetric transmission, trading a dollar-neutral portfolio of followers against a universe hedge under realistic institutional execution (**Gross 0 bps** and **Net 1 bps**).
 
 ## Objective & Key Achievements
 
 ### Project Objective
-The objective of this research is to detect and systematically exploit cross-asset informational lead-lag spillover in cryptocurrency markets using continuous-time path signatures and directed network centrality. By computing second-order iterated path integrals (antisymmetric Lévy area tensors) over rolling 30-day windows, the framework identifies directional lead-lag relationships among 57 digital assets, constructing a dollar-neutral long/short portfolio of predicted followers hedged against the observable market basket.
+The objective of this research is to detect and systematically exploit cross-asset asymmetric informational spillover in cryptocurrency markets using continuous-time path signatures and directed network centrality. By computing second-order iterated path integrals (antisymmetric Lévy area tensors) over rolling 30-day windows, the framework identifies directional leadership relationships among 57 digital assets, constructing a dollar-neutral long/short portfolio of predicted followers hedged against the observable market basket.
 
 ### Key Achievements
 - **High Standalone Gross & Net Compounding:** Over the 4.2-year sample (21 August 2019 to 5 November 2023, 1,538 continuous daily observations):
@@ -13,9 +13,9 @@ The objective of this research is to detect and systematically exploit cross-ass
   - **Net (1.0 bps):** Delivered a cumulative net return of **+223.33% (3.23x capital compounding)**, translating to a **+32.14% CAGR** and an annualized Sharpe ratio of **1.16** ($\sqrt{365.25}$).
 - **Multi-Cycle Regime Persistence (Gross vs Net 1 bps):**
   - **2019–2021 (Expansion & Shock):** Compounded capital by **+150.70% Gross / +112.70% Net 1 bps** (CAGR: **+47.48% Gross / +37.58% Net**, Sharpe: **1.35 Gross / 1.14 Net**, Max Drawdown: -23.21% Gross / -24.86% Net).
-  - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79% Gross / +52.01% Net 1 bps** (CAGR: **+34.50% Gross / +25.48% Net**, Sharpe: **1.72 Gross / 1.34 Net**, Max Drawdown: **-8.90% Gross / -10.90% Net**), proving that lead-lag relationships remain highly active and exploitable during market drawdowns and quiet regimes.
+  - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79% Gross / +52.01% Net 1 bps** (CAGR: **+34.50% Gross / +25.48% Net**, Sharpe: **1.72 Gross / 1.34 Net**, Max Drawdown: **-8.90% Gross / -10.90% Net**), proving that directional spillover dynamics remain highly active and exploitable during market drawdowns and quiet regimes.
 - **Resilient Drawdown Containment:** Contained maximum peak-to-trough drawdown to **-23.21% Gross / -24.86% Net 1 bps** across 4.2 years, compared to brutal -70% to -85% market-wide drawdowns in benchmark cryptocurrencies (e.g., Bitcoin and Ethereum during the 2022 crypto winter).
-- **Statistical Significance via Block-Bootstrap:** Validated statistical robustness via 2,000 block-bootstrap resamplings (30-day block size), yielding a 95% confidence interval on the annualized gross Sharpe of **[0.63, 2.16]**, confirming that lead-lag alpha is statistically non-spurious.
+- **Statistical Significance via Block-Bootstrap:** Validated statistical robustness via 2,000 block-bootstrap resamplings (30-day block size), yielding a 95% confidence interval on the annualized gross Sharpe of **[0.63, 2.16]**, confirming that directional centrality alpha is statistically non-spurious.
 - **Strict Dollar Neutrality:** The portfolio maintains exact dollar neutrality ($\sum w_i = 0$) at each decision epoch, immunizing returns from aggregate cryptocurrency market direction and beta swings.
 
 ---
@@ -28,8 +28,8 @@ The evaluation horizon covers 57 digital assets from 21 August 2019 to 5 Novembe
 
 | Portfolio Strategy | Execution Friction | Total Return | CAGR | Annual Volatility | Annualized Sharpe | Max Drawdown | Daily Turnover |
 |:---|:---:|---:|---:|---:|---:|---:|---:|
-| **Global Lead-Lag** | **Gross (0.0 bps)** | **+333.19%** | **+41.64%** | **27.27%** | **1.41** | **-23.21%** | 1.90x NAV |
-| **Global Lead-Lag** | **Net (1.0 bps)** | **+223.33%** | **+32.14%** | **27.24%** | **1.16** | **-24.86%** | 1.90x NAV |
+| **Directed Information Flow** | **Gross (0.0 bps)** | **+333.19%** | **+41.64%** | **27.27%** | **1.41** | **-23.21%** | 1.90x NAV |
+| **Directed Information Flow** | **Net (1.0 bps)** | **+223.33%** | **+32.14%** | **27.24%** | **1.16** | **-24.86%** | 1.90x NAV |
 
 ### Historical Sub-Period Breakdown (Gross vs Net 1 bps)
 
@@ -57,7 +57,7 @@ $$
 \mathrm{Sharpe} = \frac{\mu_{\mathrm{daily}} \times 365.25}{\sigma_{\mathrm{daily}} \times \sqrt{365.25}} = \frac{\mu_{\mathrm{daily}}}{\sigma_{\mathrm{daily}}} \times \sqrt{365.25}
 $$
 
-Under this continuous-time standard, the Global Lead-Lag strategy generates an annualized volatility of **27.27%** and a gross Sharpe of **1.41** (retaining **1.16 Net Sharpe** at 1.0 bps).
+Under this continuous-time standard, the Directed Information Flow strategy generates an annualized volatility of **27.27%** and a gross Sharpe of **1.41** (retaining **1.16 Net Sharpe** at 1.0 bps).
 
 ## Execution Microstructure: Why 1.0 bps for Crypto Stat Arb?
 
@@ -124,7 +124,7 @@ $$
 
 ### 3. Dollar-Neutral Portfolio Construction
 
-The trading logic exploits momentum transmission from leaders to followers:
+The trading logic exploits directional momentum transmission from central market leaders to followers:
 
 - Let $\bar{r}_{\mathrm{leader}, t}$ be the average return of the leader basket on day $t$.
 - If $\bar{r}_{\mathrm{leader}, t} > 0$, the strategy takes a long position in the follower basket and shorts the broader universe basket.
@@ -133,11 +133,11 @@ The trading logic exploits momentum transmission from leaders to followers:
 **Position Weights:**
 
 $$
-w_{\mathrm{follower}, i} = +\frac{\operatorname{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{follower}}}
+w_{\mathrm{follower}, i} = +\frac{\mathrm{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{follower}}}
 $$
 
 $$
-w_{\mathrm{market}, j} = -\frac{\operatorname{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{market}}}
+w_{\mathrm{market}, j} = -\frac{\mathrm{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{market}}}
 $$
 
 This structure enforces strict dollar neutrality ($\sum_{k} w_k = 0$) and insulates the portfolio from aggregate cryptocurrency market direction.
