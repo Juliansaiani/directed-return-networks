@@ -13,10 +13,10 @@ The objective of this research is to detect and systematically exploit cross-ass
   - **Net (1.0 bps):** Delivered a cumulative net return of **+223.33% (3.23x capital compounding)**, translating to a **+32.14% CAGR** and an annualized Sharpe ratio of **1.16** ($\sqrt{365.25}$).
 - **Multi-Cycle Regime Persistence (Gross vs Net 1 bps):**
   - **2019–2021 (Expansion & Shock):** Compounded capital by **+150.70% Gross / +112.70% Net 1 bps** (CAGR: **+47.48% Gross / +37.58% Net**, Sharpe: **1.35 Gross / 1.14 Net**, Max Drawdown: -23.21% Gross / -24.86% Net).
-  - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79% Gross / +52.01% Net 1 bps** (CAGR: **+34.50% Gross / +25.48% Net**, Sharpe: **1.72 Gross / 1.34 Net**, Max Drawdown: **-8.90% Gross / -10.90% Net**), proving that directional spillover dynamics remain highly active and exploitable during market drawdowns and quiet regimes.
+  - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79% Gross / +52.01% Net 1 bps** (CAGR: **+34.50% Gross / +25.48% Net**, Sharpe: **1.72 Gross / 1.34 Net**, Max Drawdown: **-8.90% Gross / -10.90% Net**), demonstrating that directional spillover dynamics remain highly active and exploitable during market drawdowns and quiet regimes.
 - **Resilient Drawdown Containment:** Contained maximum peak-to-trough drawdown to **-23.21% Gross / -24.86% Net 1 bps** across 4.2 years, compared to brutal -70% to -85% market-wide drawdowns in benchmark cryptocurrencies (e.g., Bitcoin and Ethereum during the 2022 crypto winter).
-- **Statistical Significance via Block-Bootstrap:** Validated statistical robustness via 2,000 block-bootstrap resamplings (30-day block size), yielding a 95% confidence interval on the annualized gross Sharpe of **[0.63, 2.16]**, confirming that directional centrality alpha is statistically non-spurious.
-- **Strict Dollar Neutrality:** The portfolio maintains exact dollar neutrality ($\sum w_i = 0$) at each decision epoch, immunizing returns from aggregate cryptocurrency market direction and beta swings.
+- **Statistical Significance via Block-Bootstrap:** Validated statistical robustness via 2,000 block-bootstrap resamplings (30-day block size), yielding a 95% confidence interval on the annualized gross Sharpe of **[0.63, 2.16]**, confirming empirical stability and positive expectancy across resampled historical paths.
+- **Strict Dollar Neutrality:** The portfolio maintains exact dollar neutrality ($\sum w_i = 0$) at each decision epoch, hedging against broad market-level directional moves, while capturing cross-asset informational centrality differentials.
 
 ---
 
@@ -80,7 +80,7 @@ Systematic hedge funds and proprietary trading firms (Wintermute, Jump Crypto, F
 Traditional European equities incur UK Stamp Duty (50 bps) or French FTT (30 bps), and US equities incur SEC Section 31 fees. Cryptocurrency spot and perpetual markets carry **zero transaction taxes and zero clearing surcharges**.
 
 ### 5. High Turnover Profile (~695x NAV Annualized)
-Because the strategy rebalances followers dynamically (1.90x daily turnover, ~695x annualized), imposing a retail taker fee of 5 bps would be microstructurally inaccurate for an institutional fund. At **1.0 bps** (the institutional prime broker blended benchmark), the strategy retains **Sharpe 1.16** and compounds capital by **+223.33% net** (+32.14% CAGR).
+Because the strategy rebalances followers dynamically (1.90x daily turnover, ~695x annualized), capturing alpha requires passive limit order execution (Maker orders at the BBO) rather than crossing the book with aggressive market orders. At **1.0 bps** (the institutional prime broker blended benchmark), the strategy retains **Sharpe 1.16** and compounds capital by **+223.33% net** (+32.14% CAGR).
 
 ### Multi-Tier Institutional Fee Sensitivity Grid
 
@@ -140,7 +140,7 @@ $$
 w_{\mathrm{market}, j} = -\frac{\mathrm{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{market}}}
 $$
 
-This structure enforces strict dollar neutrality ($\sum_{k} w_k = 0$) and insulates the portfolio from aggregate cryptocurrency market direction.
+This structure enforces strict dollar neutrality ($\sum_{k} w_k = 0$), hedging against broad market-level directional moves, while capturing idiosyncratic informational centrality differentials.
 
 ## Implementation & Reproducibility
 
