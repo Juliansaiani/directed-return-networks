@@ -53,12 +53,13 @@ def uncertainty(daily, config, block=30, repetitions=2000):
                              upper_95=np.quantile(estimates,.975,axis=0), block_days=block, repetitions=repetitions))
 
 
-def run(root):
+def run(root, include_clustered=False):
     root = root.resolve(); config = json.loads((root/'config.json').read_text())
     prices = load_prices(root, config)
     output = root/'artifacts';output.mkdir(exist_ok=True)
     frames, target_hashes = [], {}
-    for mode, clustered in [('global', False)]:
+    modes = [('global', False), ('clustered', True)] if include_clustered else [('global', False)]
+    for mode, clustered in modes:
         target_path = output/f'{mode}_targets.csv'
         cache_manifest = root/'data/target_cache.json'
         cache = json.loads(cache_manifest.read_text()) if cache_manifest.exists() else {}
@@ -135,17 +136,29 @@ def plot(daily, output):
         dd_net = nav_net / np.maximum.accumulate(nav_net) - 1
         worst_net = int(np.argmin(dd_net))
 
+    ret_g = frame_gross.net_return.to_numpy()
+    n_years = len(ret_g) / 365.25
+    sharpe_g = float(ret_g.mean() / (ret_g.std(ddof=1) + 1e-12) * np.sqrt(365.25))
+    cagr_g = float(nav_gross[-1] ** (1.0 / n_years) - 1.0)
+    tot_g = float(nav_gross[-1] - 1.0)
+    label_gross = f'Gross (0 bps): Sharpe {sharpe_g:.2f} | CAGR {cagr_g:+.1%} | Total Return {tot_g:+.1%}'
+
+    if nav_net is not None:
+        ret_n = frame_net.net_return.to_numpy()
+        sharpe_n = float(ret_n.mean() / (ret_n.std(ddof=1) + 1e-12) * np.sqrt(365.25))
+        cagr_n = float(nav_net[-1] ** (1.0 / n_years) - 1.0)
+        tot_n = float(nav_net[-1] - 1.0)
+        label_net = f'Net (1 bps): Sharpe {sharpe_n:.2f} | CAGR {cagr_n:+.1%} | Total Return {tot_n:+.1%}'
+
     with plt.rc_context():
         plt.style.use('default')
         fig, axes = plt.subplots(2, 1, figsize=(12, 8.5), sharex=True,
                                  gridspec_kw={'height_ratios': [2, 1]})
 
         # Panel 1: Growth of $1.00
-        axes[0].plot(dates, nav_gross, color='#1f77b4', lw=2.0,
-                     label=f'Gross (0 bps): Sharpe 1.41 | CAGR +41.6% | Total Return +333.2%')
+        axes[0].plot(dates, nav_gross, color='#1f77b4', lw=2.0, label=label_gross)
         if nav_net is not None:
-            axes[0].plot(dates, nav_net, color='#2ca02c', lw=1.8, linestyle='--',
-                         label=f'Net (1 bps): Sharpe 1.16 | CAGR +32.1% | Total Return +223.3%')
+            axes[0].plot(dates, nav_net, color='#2ca02c', lw=1.8, linestyle='--', label=label_net)
             axes[0].fill_between(dates, nav_net, nav_gross, color='#ff7f0e', alpha=0.15,
                                  label='1 bps Institutional Execution Friction')
         
@@ -190,10 +203,12 @@ def plot(daily, output):
 
 
 def main():
-    parser = argparse.ArgumentParser();parser.add_argument('--root',type=Path,default=Path.cwd())
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--root', type=Path, default=Path.cwd())
+    parser.add_argument('--all', action='store_true', help='Include exploratory clustered partition experiments')
     args = parser.parse_args()
     with threadpool_limits(limits=1):
-        run(args.root)
+        run(args.root, include_clustered=args.all)
 
 
 if __name__ == '__main__':

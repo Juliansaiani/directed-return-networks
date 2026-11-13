@@ -162,6 +162,8 @@ python -m pip install -r requirements.txt
 python -m pip install -e '.[dev]'
 python -m pytest -q
 python -m leadlag.research
+# Optionally include exploratory clustered partition experiments:
+# python -m leadlag.research --all
 ```
 
 The runner downloads and verifies the pinned dataset (`data/crypto_daily_panel.csv`) via SHA-256 checksum. All test assertions and numerical replication checks run offline.
