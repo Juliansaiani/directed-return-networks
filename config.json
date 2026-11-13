@@ -9,8 +9,15 @@
   "cluster_max": 10,
   "seed": 42,
   "annualization": 365.25,
-  "cost_bps": [0],
-  "extra_execution_days": [0],
+  "cost_bps": [
+    0,
+    0.5,
+    1,
+    2
+  ],
+  "extra_execution_days": [
+    0
+  ],
   "early_period_end": "2021-12-31",
   "interpretation": "Historical replication on a retrospectively selected crypto universe, not a fresh holdout. Zero-delay variants assume idealized execution at the signal close. Gross returns omit fees, funding and borrow costs."
 }

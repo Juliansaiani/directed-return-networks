@@ -11,7 +11,10 @@
     "seed": 42,
     "annualization": 365.25,
     "cost_bps": [
-      0
+      0,
+      0.5,
+      1,
+      2
     ],
     "extra_execution_days": [
       0

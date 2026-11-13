@@ -10,7 +10,8 @@ The objective of this research is to detect and systematically exploit cross-ass
 ### Key Achievements
 - **High Standalone Gross Compounding:** Delivered a cumulative gross return of **+333.19% (4.33x capital compounding)** over the 4.2-year sample (21 August 2019 to 5 November 2023, 1,538 daily observations), translating to a **+41.64% CAGR**.
 - **Strong Risk-Adjusted Gross Sharpe Ratio:** Delivered an annualized gross Sharpe ratio of **1.41**, annualized by $\sqrt{365.25}$ for continuous 24/7/365 digital asset trading.
-- **Robust Multi-Cycle Persistence:**
+- **Robust Institutional Net Compounding:** Retains strong economic alpha across institutional crypto fee schedules: **Sharpe 1.29** at 0.5 bps (+274.25% net), **Sharpe 1.16** at 1.0 bps (+223.33% net), and **Sharpe 0.90** at 2.0 bps (+141.34% net).
+- **Multi-Cycle Regime Persistence:**
   - **2019–2021 (Expansion & Crash Cycle):** Compounded capital by **+150.70%** (CAGR **+47.48%**, Sharpe **1.35**, Max Drawdown -23.21%).
   - **2022–2023 (Bear Market & Recovery):** Compounded capital by **+72.79%** (CAGR **+34.50%**, Sharpe **1.72**, Max Drawdown **-8.90%**), proving that lead-lag relationships remain highly active and exploitable during market drawdowns and quiet regimes.
 - **Resilient Drawdown Containment:** Contained maximum peak-to-trough drawdown to **-23.21%** across 4.2 years, compared to brutal -70% to -85% market-wide drawdowns in benchmark cryptocurrencies (e.g., Bitcoin and Ethereum in 2022).
@@ -23,7 +24,7 @@ The evaluation horizon covers 57 digital assets from 21 August 2019 to 5 Novembe
 
 ## Performance Summary & Overview
 
-### Full-Period Performance (2019–2023)
+### Full-Period Gross Performance (2019–2023)
 
 | Portfolio Strategy | Total Return | CAGR | Annual Volatility | Gross Sharpe | Max Drawdown | Daily Turnover |
 |:---|---:|---:|---:|---:|---:|---:|
@@ -57,10 +58,23 @@ $$
 
 Under this continuous-time standard, the Global Lead-Lag strategy generates an annualized volatility of **27.27%** and a gross Sharpe of **1.41**.
 
-## Execution Architecture & High-Frequency Scalability
+## Execution Architecture & Institutional Fee Sensitivity
 
-- **Turnover Profile:** The strategy rebalances follower allocations and the universe hedge daily, generating an average daily one-way turnover of **~1.90x NAV** (~694x NAV annualized).
-- **Intraday Execution Implementation:** In production crypto market environments, lead-lag informational diffusion operates at intraday velocity. The theoretical alpha is captured using high-throughput maker execution (passive limit order queues, taker fee avoidance, and cross-exchange API streaming), preserving the **+333.19% gross compounding** and **1.41 Sharpe** without incurring adverse taker penalties.
+Evaluating transaction costs in high-turnover cryptocurrency trading requires accounting for the unique **Maker/Taker microstructure** and **volume-tiered fee schedules** of major digital asset exchanges (Binance, Bybit, OKX, Coinbase Prime):
+
+- **Turnover Profile:** The strategy dynamically rebalances predicted followers against the universe hedge daily, generating an average daily one-way turnover of **~1.90x NAV** (~695x NAV annualized).
+- **Institutional Microstructure Reality:** In high-frequency and daily systematic crypto strategies, institutional desks (market makers and systematic hedge funds) execute orders passively via **limit orders (Maker)** rather than market orders (Taker). At VIP Tier 8–9 volumes (> $1B/month), exchanges offer zero maker fees or liquidity rebates (-0.5 to +1.0 bps), while institutional crypto prime brokers clear execution between 0.5 and 1.5 bps without stamp duties or central clearing surcharges.
+
+### Multi-Year Net Performance under Institutional Crypto Execution
+
+| Execution Friction | Market Access Tier | Total Return | CAGR | Annual Volatility | Annualized Sharpe | Max Drawdown | Daily Turnover |
+|:---|:---|---:|---:|---:|---:|---:|---:|
+| **0.0 bps (Gross)** | Research Baseline | **+333.19%** | **+41.64%** | **27.27%** | **1.41** | **-23.21%** | 1.90x NAV |
+| **0.5 bps** | Tier 1 VIP Maker / Liquidity Rebate | **+274.25%** | **+36.81%** | 27.26% | **1.29** | **-24.04%** | 1.90x NAV |
+| **1.0 bps** | Institutional Crypto Prime Brokerage | **+223.33%** | **+32.14%** | 27.24% | **1.16** | **-24.86%** | 1.90x NAV |
+| **2.0 bps** | Blended Institutional Maker / Taker | **+141.34%** | **+23.27%** | 27.22% | **0.90** | **-26.47%** | 1.90x NAV |
+
+All cost tiers are evaluated directly by the backtest engine with exact self-financing fee calculation, handling asset drift and continuous compounding, and are recorded in [scores.csv](artifacts/scores.csv).
 
 ## Method & Mathematical Foundations
 
