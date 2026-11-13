@@ -44,9 +44,16 @@ A critical distinction between cryptocurrency and traditional financial research
 
 - **Traditional Equity/Futures Markets ($\sqrt{252}$):** Conventional exchanges (NYSE, Nasdaq, LSE, CME) close on weekends and official exchange holidays, leaving approximately 252 active trading days per year. The standard square-root-of-time scaling factor is therefore $\sqrt{252} \approx 15.87$.
 - **Continuous Digital Asset Markets ($\sqrt{365.25}$):** Cryptocurrency spot and derivative exchanges trade 24 hours a day, 7 days a week, 365 days a year without market closure. Accounting for leap years ($(365 \times 3 + 366) / 4 = 365.25$), an annualized return series contains $365.25$ daily observations.
-- **Mathematical Formulation:**
-  $$\sigma_{\text{ann}} = \sigma_{\text{daily}} \times \sqrt{365.25}$$
-  $$\text{Sharpe} = \frac{\mu_{\text{daily}} \times 365.25}{\sigma_{\text{daily}} \times \sqrt{365.25}} = \frac{\mu_{\text{daily}}}{\sigma_{\text{daily}}} \times \sqrt{365.25}$$
+
+**Mathematical Formulation:**
+
+$$
+\sigma_{\mathrm{ann}} = \sigma_{\mathrm{daily}} \times \sqrt{365.25}
+$$
+
+$$
+\mathrm{Sharpe} = \frac{\mu_{\mathrm{daily}} \times 365.25}{\sigma_{\mathrm{daily}} \times \sqrt{365.25}} = \frac{\mu_{\mathrm{daily}}}{\sigma_{\mathrm{daily}}} \times \sqrt{365.25}
+$$
 
 Under this continuous-time standard, the Global Lead-Lag strategy generates an annualized volatility of **27.27%** and a gross Sharpe of **1.41**.
 
@@ -58,26 +65,50 @@ Under this continuous-time standard, the Global Lead-Lag strategy generates an a
 ## Method & Mathematical Foundations
 
 ### 1. Level-Two Path Signatures & Lévy Area Matrix
+
 For a multi-dimensional continuous price path $X_t = (X_t^1, \dots, X_t^N)$ over a rolling window of $W = 30$ days, returns are normalized into standardized deviations $z_t$. The second-order iterated integral (Lévy area) between assets $i$ and $j$ is defined by:
-$$A_{i,j} = \frac{1}{2} \int_0^T (z_t^i - z_0^i) dz_t^j - (z_t^j - z_0^j) dz_t^i$$
+
+$$
+A_{i,j} = \frac{1}{2} \int_0^T (z_t^i - z_0^i) \, dz_t^j - (z_t^j - z_0^j) \, dz_t^i
+$$
+
 In discrete time with step increments $\Delta z_t = z_t - z_{t-1}$, the calculation is vectorized as:
-$$A_{i,j} = \frac{1}{2} \left( \sum_{t=1}^T z_{t-1}^i \Delta z_t^j - z_{t-1}^j \Delta z_t^i \right)$$
+
+$$
+A_{i,j} = \frac{1}{2} \sum_{t=1}^T \left( z_{t-1}^i \Delta z_t^j - z_{t-1}^j \Delta z_t^i \right)
+$$
+
 The resulting matrix $A \in \mathbb{R}^{N \times N}$ is strictly antisymmetric ($A = -A^\top$ with diagonal $A_{i,i} = 0$). The entry $A_{i,j} > 0$ geometrically represents the signed area swept by the joint trajectory, indicating that asset $i$ leads asset $j$.
 
 ### 2. Directed Network Centrality & Leader/Follower Selection
+
 The directional leadership score of asset $i$ is obtained from the row average of the Lévy area matrix:
-$$\bar{A}_i = \frac{1}{N} \sum_{j=1}^N A_{i,j}$$
+
+$$
+\bar{A}_i = \frac{1}{N} \sum_{j=1}^{N} A_{i,j}
+$$
+
 - **Leaders:** The top 20% of assets with the highest $\bar{A}_i$ are identified as current market leaders.
 - **Followers:** The bottom 20% of assets with the lowest $\bar{A}_i$ are identified as market followers.
 
 ### 3. Dollar-Neutral Portfolio Construction
+
 The trading logic exploits momentum transmission from leaders to followers:
-- Let $\bar{r}_{\text{leaders}, t}$ be the average return of the leader basket on day $t$.
-- If $\bar{r}_{\text{leaders}, t} > 0$, the strategy takes a long position in the follower basket and shorts the broader universe basket.
-- If $\bar{r}_{\text{leaders}, t} < 0$, the strategy shorts the follower basket and goes long the universe basket.
-- **Position Weights:**
-  $$w_{\text{followers}, i} = +\frac{\text{sign}(\bar{r}_{\text{leaders}, t})}{N_{\text{followers}}}$$
-  $$w_{\text{market}, j} = -\frac{\text{sign}(\bar{r}_{\text{leaders}, t})}{N_{\text{market}}}$$
+
+- Let $\bar{r}_{\mathrm{leader}, t}$ be the average return of the leader basket on day $t$.
+- If $\bar{r}_{\mathrm{leader}, t} > 0$, the strategy takes a long position in the follower basket and shorts the broader universe basket.
+- If $\bar{r}_{\mathrm{leader}, t} < 0$, the strategy shorts the follower basket and goes long the universe basket.
+
+**Position Weights:**
+
+$$
+w_{\mathrm{follower}, i} = +\frac{\operatorname{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{follower}}}
+$$
+
+$$
+w_{\mathrm{market}, j} = -\frac{\operatorname{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\mathrm{market}}}
+$$
+
 This structure enforces strict dollar neutrality ($\sum_{k} w_k = 0$) and insulates the portfolio from aggregate cryptocurrency market direction.
 
 ## Implementation & Reproducibility
