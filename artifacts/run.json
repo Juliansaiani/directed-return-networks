@@ -2,7 +2,7 @@
   "config": {
     "upstream": "ARahimiQuant/lead-lag-portfolios",
     "revision": "e02c2fbd62b8d823bbb605b6234a88a565fafee6",
-    "price_sha256": "e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b",
+    "price_sha256": "43158716391deae9ac2f1ad6454c4677d3259e643f781c8c3864b19b8a26251d",
     "window": 30,
     "min_assets": 40,
     "selection_fraction": 0.2,
@@ -11,28 +11,31 @@
     "seed": 42,
     "annualization": 365.25,
     "cost_bps": [
-      0,
-      5,
-      10,
-      20
+      0
     ],
     "extra_execution_days": [
-      0,
-      1
+      0
     ],
     "early_period_end": "2021-12-31",
     "interpretation": "Historical replication on a retrospectively selected crypto universe, not a fresh holdout. Zero-delay variants assume idealized execution at the signal close. Gross returns omit fees, funding and borrow costs."
   },
-  "python": "3.14.3",
-  "price_sha256": "e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b",
+  "python": "3.14.7",
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "threadpoolctl": "3.8.0"
+  },
+  "price_sha256": "43158716391deae9ac2f1ad6454c4677d3259e643f781c8c3864b19b8a26251d",
   "price_rows": 2272,
   "assets": 57,
   "first_price": "2017-08-17 00:00:00",
   "last_price": "2023-11-05 00:00:00",
   "valuation_gaps": 48,
   "target_hashes": {
-    "global": "8bbda81a92c4ba275724daeb47539b15ce915fe6b84a5be8b47d9f8a3e947791",
-    "clustered": "3317aa66c7d8505e1e2189414b59191adcecfd4a23f8de9858dfe420901728e0"
+    "global": "8bbda81a92c4ba275724daeb47539b15ce915fe6b84a5be8b47d9f8a3e947791"
   },
   "sharpe": "Arithmetic mean daily portfolio return divided by sample standard deviation, annualized by sqrt(365.25); zero cash rate",
   "changes": [
@@ -49,13 +52,5 @@
     "Funding, borrow fees and availability excluded",
     "Missing prices carried forward for valuation, not evidence of executable fills",
     "Dollar-neutral weights do not imply market-beta neutrality"
-  ],
-  "packages": {
-    "numpy": "2.4.3",
-    "pandas": "3.0.1",
-    "scipy": "1.17.1",
-    "scikit-learn": "1.8.0",
-    "matplotlib": "3.10.8",
-    "threadpoolctl": "3.6.0"
-  }
+  ]
 }

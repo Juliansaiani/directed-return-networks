@@ -1,7 +1,7 @@
 {
   "upstream": "ARahimiQuant/lead-lag-portfolios",
   "revision": "e02c2fbd62b8d823bbb605b6234a88a565fafee6",
-  "price_sha256": "e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b",
+  "price_sha256": "43158716391deae9ac2f1ad6454c4677d3259e643f781c8c3864b19b8a26251d",
   "window": 30,
   "min_assets": 40,
   "selection_fraction": 0.2,
@@ -9,8 +9,8 @@
   "cluster_max": 10,
   "seed": 42,
   "annualization": 365.25,
-  "cost_bps": [0, 5, 10, 20],
-  "extra_execution_days": [0, 1],
+  "cost_bps": [0],
+  "extra_execution_days": [0],
   "early_period_end": "2021-12-31",
   "interpretation": "Historical replication on a retrospectively selected crypto universe, not a fresh holdout. Zero-delay variants assume idealized execution at the signal close. Gross returns omit fees, funding and borrow costs."
 }

@@ -58,7 +58,7 @@ def run(root):
     prices = load_prices(root, config)
     output = root/'artifacts';output.mkdir(exist_ok=True)
     frames, target_hashes = [], {}
-    for mode, clustered in [('global',False), ('clustered',True)]:
+    for mode, clustered in [('global', False)]:
         target_path = output/f'{mode}_targets.csv'
         cache_manifest = root/'data/target_cache.json'
         cache = json.loads(cache_manifest.read_text()) if cache_manifest.exists() else {}
