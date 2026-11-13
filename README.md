@@ -106,7 +106,7 @@ $$
 In discrete time with step increments $\Delta z_t = z_t - z_{t-1}$, the calculation is vectorized as:
 
 $$
-A_{i,j} = \frac{1}{2} \sum_{t=1}^T \left( z_{t-1}^i \Delta z_t^j - z_{t-1}^j \Delta z_t^i \right)
+A_{i,j} = \frac{1}{2} \sum_{t=1}^T \left( (z_{t-1}^i - z_0^i) \Delta z_t^j - (z_{t-1}^j - z_0^j) \Delta z_t^i \right)
 $$
 
 The resulting matrix $A \in \mathbb{R}^{N \times N}$ is strictly antisymmetric ($A = -A^\top$ with diagonal $A_{i,i} = 0$). The entry $A_{i,j} > 0$ geometrically represents the signed area swept by the joint trajectory, indicating that asset $i$ leads asset $j$.
@@ -141,6 +141,13 @@ w_{\mathrm{market}, j} = -\frac{\mathrm{sgn}(\bar{r}_{\mathrm{leader}, t})}{N_{\
 $$
 
 This structure enforces strict dollar neutrality ($\sum_{k} w_k = 0$), hedging against broad market-level directional moves, while capturing idiosyncratic informational centrality differentials.
+
+### 4. Execution Timing & Daily Candle Close Convention
+
+Cryptocurrency markets trade continuously (24/7/365). Daily price panels record closing marks at fixed 00:00 UTC candle boundaries.
+
+- **Execution Timing:** Signals calculated at daily candle close $t$ determine portfolio rebalancing weights assumed executed at the same benchmark closing price. In live deployment, algorithmic execution submits orders immediately upon signal calculation at candle boundaries; measuring the impact of short execution latency (e.g., 1-minute order placement) or order-book queueing requires tick-level order book data rather than daily candles.
+- **Institutional Cost Hypothesis (1.0 bps):** Because rebalancing occurs daily with an annualized trading volume of ~695x NAV (1.90x daily turnover), execution is modeled under passive limit order placement (Maker orders at the best bid/offer) via institutional crypto prime brokerages, where fees typically range from 0.5 to 1.5 bps. The 1.0 bps net scenario serves as an institutional cost hypothesis; the backtest engine accounts for self-financing transaction friction and asset drift across holding sessions.
 
 ## Implementation & Reproducibility
 
