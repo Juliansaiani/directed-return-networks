@@ -162,9 +162,11 @@ python -m pip install -r requirements.txt
 python -m pip install -e '.[dev]'
 python -m pytest -q
 python -m leadlag.research
-# Optionally include exploratory clustered partition experiments:
+# Recalculates both global and clustered variants under the active configuration (0, 0.5, 1, 2 bps):
 # python -m leadlag.research --all
 ```
+
+*Note on Reproducibility & Archived Studies:* `python -m leadlag.research --all` recalculates the global and spectral clustered models under the active institutional fee grid (0, 0.5, 1.0, 2.0 bps). Legacy exploratory comparisons—including broad retail fee sweeps (5, 10, 20 bps), 1-day execution delay tests, and reproduction of the original benchmark implementation—are preserved as archived historical research in `notebooks/experiments.ipynb`.
 
 The runner downloads and verifies the pinned dataset (`data/crypto_daily_panel.csv`) via SHA-256 checksum. All test assertions and numerical replication checks run offline.
 

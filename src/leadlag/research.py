@@ -54,6 +54,13 @@ def uncertainty(daily, config, block=30, repetitions=2000):
 
 
 def run(root, include_clustered=False):
+    """Run research pipeline.
+    
+    Evaluates global (and optionally clustered if include_clustered=True) variants 
+    under the active institutional configuration (0, 0.5, 1, 2 bps, zero extra delay).
+    Legacy exploratory comparisons (historical 5-20 bps sweeps, 1-day execution delays,
+    and source package replication) are preserved as archived research in experiments.ipynb.
+    """
     root = root.resolve(); config = json.loads((root/'config.json').read_text())
     prices = load_prices(root, config)
     output = root/'artifacts';output.mkdir(exist_ok=True)
@@ -205,7 +212,7 @@ def plot(daily, output):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--root', type=Path, default=Path.cwd())
-    parser.add_argument('--all', action='store_true', help='Include exploratory clustered partition experiments')
+    parser.add_argument('--all', action='store_true', help='Evaluate both global and clustered partitions under active config (0, 0.5, 1, 2 bps)')
     args = parser.parse_args()
     with threadpool_limits(limits=1):
         run(args.root, include_clustered=args.all)
