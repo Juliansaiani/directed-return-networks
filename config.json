@@ -1,0 +1,35 @@
+{
+  "dataset": "Crypto Daily Panel (57 liquid digital assets)",
+  "price_sha256": "6c99b9b7aa7608f4aff414e244ee14d9faa8b9a4f15bb80d1d7c47c654b5cf45",
+  "data_provenance": {
+    "quote_currency": "USDT",
+    "price_definition": "00:00 UTC daily Spot close (Binance 1d kline close)",
+    "base_sample": "2017-08-17 to 2023-11-05 (2,272 days) across 57 Binance Spot USDT pairs (SHA-256 e919b8d5...)",
+    "extension_sample": "2023-11-06 to 2023-12-31 (56 days) fetched via Binance public REST API (/api/v3/klines, symbol={TICKER}USDT, interval=1d, close k[4]); overlapping rows through 2023-11-05 are unchanged",
+    "terminal_missing_series_2023": {
+      "TOMO": "Last valid close 2023-11-20 (41 missing days): Binance delisted TOMOUSDT for TomoChain -> Viction (VIC) rebranding/swap",
+      "PERL": "Last valid close 2023-12-07 (24 missing days): Binance delisted PERLUSDT Spot pairs",
+      "BUSD": "Last valid close 2023-12-15 (16 missing days): Binance ceased BUSDUSDT Spot support after Paxos wind-down"
+    },
+    "missing_value_handling": "Assets with missing prices inside the 30-day lookback window are excluded from signal/hedge weights; for held-position valuation and simple-return benchmarks, missing terminal prices are forward-filled (0% return after delisting) as an accounting convention, not evidence of executable fills"
+  },
+  "window": 30,
+  "min_assets": 40,
+  "selection_fraction": 0.2,
+  "cluster_min": 3,
+  "cluster_max": 10,
+  "seed": 42,
+  "annualization": 365.25,
+  "cost_bps": [
+    0,
+    0.5,
+    1,
+    2
+  ],
+  "extra_execution_days": [
+    0
+  ],
+  "start_date": "2021-01-01",
+  "early_period_end": "2021-12-31",
+  "interpretation": "Historical replication on a retrospectively selected crypto universe, not a fresh holdout. Zero-delay variants assume idealized execution at the signal close. Gross returns omit fees, funding and borrow costs."
+}

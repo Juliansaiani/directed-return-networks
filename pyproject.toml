@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "directed-return-networks"
+version = "0.1.0"
+description = "Cryptocurrency cross-sectional statistical arbitrage using level-two path signatures and directed return networks"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Julian Saiani", email = "juliansaiapro@gmail.com"}
+]
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2,<3",
+    "pandas>=2.2,<4",
+    "scipy>=1.13,<2",
+    "scikit-learn>=1.5,<2",
+    "matplotlib>=3.9,<4",
+    "threadpoolctl>=3,<4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "nbformat>=5.10",
+    "nbclient>=0.10",
+    "ipykernel>=6",
+]
+
+[project.scripts]
+directed-networks = "directed_networks.research:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
