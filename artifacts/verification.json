@@ -1,0 +1,14 @@
+{
+  "full_rebuild_matches_independent_audit": {
+    "global": {
+      "rows": 2272,
+      "assets": 57,
+      "maximum_difference": 0.0
+    },
+    "clustered": {
+      "rows": 2272,
+      "assets": 57,
+      "maximum_difference": 0.0
+    }
+  }
+}
