@@ -5,7 +5,7 @@
     "data_provenance": {
       "quote_currency": "USDT",
       "price_definition": "00:00 UTC daily Spot close (Binance 1d kline close)",
-      "base_sample": "2017-08-17 to 2023-11-05 (2,272 days) across 57 Binance Spot USDT pairs (SHA-256 e919b8d5...)",
+      "base_sample": "2017-08-17 to 2023-11-05 (2,272 days) across 57 Binance Spot USDT pairs (SHA-256 e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b, base revision e02c2fbd62b8d823bbb605b6234a88a565fafee6)",
       "extension_sample": "2023-11-06 to 2023-12-31 (56 days) fetched via Binance public REST API (/api/v3/klines, symbol={TICKER}USDT, interval=1d, close k[4]); overlapping rows through 2023-11-05 are unchanged",
       "terminal_missing_series_2023": {
         "TOMO": "Last valid close 2023-11-20 (41 missing days): Binance delisted TOMOUSDT for TomoChain -> Viction (VIC) rebranding/swap",
@@ -25,13 +25,14 @@
       0,
       0.5,
       1,
-      2
+      2,
+      5,
+      10
     ],
     "extra_execution_days": [
       0
     ],
     "start_date": "2021-01-01",
-    "early_period_end": "2021-12-31",
     "interpretation": "Historical replication on a retrospectively selected crypto universe, not a fresh holdout. Zero-delay variants assume idealized execution at the signal close. Gross returns omit fees, funding and borrow costs."
   },
   "python": "3.14.7",
@@ -62,7 +63,7 @@
   "data_provenance": {
     "quote_currency": "USDT",
     "price_definition": "00:00 UTC daily Spot close (Binance 1d kline close)",
-    "base_sample": "2017-08-17 to 2023-11-05 (2,272 days) across 57 Binance Spot USDT pairs (SHA-256 e919b8d5...)",
+    "base_sample": "2017-08-17 to 2023-11-05 (2,272 days) across 57 Binance Spot USDT pairs (SHA-256 e919b8d5c3cd712f1ff006aec5c50cc52fb4614b87041c2788f5285215da5b0b, base revision e02c2fbd62b8d823bbb605b6234a88a565fafee6)",
     "extension_sample": "2023-11-06 to 2023-12-31 (56 days) fetched via Binance public REST API (/api/v3/klines, symbol={TICKER}USDT, interval=1d, close k[4]); overlapping rows through 2023-11-05 are unchanged",
     "terminal_missing_series_2023": {
       "TOMO": "Last valid close 2023-11-20 (41 missing days): Binance delisted TOMOUSDT for TomoChain -> Viction (VIC) rebranding/swap",
@@ -79,8 +80,8 @@
     "One-day execution-delay sensitivity"
   ],
   "limitations": [
-    "Retrospective universe",
-    "Historical sample already used by source project",
+    "Retrospective 57-asset panel",
+    "No untouched post-2023 out-of-sample holdout",
     "Idealized same-close execution in zero-delay variants",
     "Funding, borrow fees and availability excluded",
     "Missing prices carried forward for valuation, not evidence of executable fills",

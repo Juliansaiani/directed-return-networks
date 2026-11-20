@@ -65,11 +65,9 @@ def uncertainty(daily, config, block=30, repetitions=2000, cost_tiers=(0, 1)):
 
 def run(root, include_clustered=False):
     """Run research pipeline.
-    
-    Evaluates global (and optionally clustered if include_clustered=True) variants 
-    under the active institutional configuration (0, 0.5, 1, 2 bps, zero extra delay).
-    Legacy exploratory comparisons (historical 5-20 bps sweeps, 1-day execution delays,
-    and source package replication) are preserved as archived research in experiments.ipynb.
+
+    Evaluates the global strategy (and optionally the exploratory clustered variant
+    when include_clustered=True) across the configured cost_bps grid (0–10 bps).
     """
     root = root.resolve(); config = json.loads((root/'config.json').read_text())
     prices = load_prices(root, config)
@@ -135,7 +133,7 @@ def run(root, include_clustered=False):
         data_provenance=config.get('data_provenance', {}),
         changes=['Vectorized exact level-2 path areas', 'Absolute-degree Hermitian normalization',
                  'Market hedge universe observed at decision date', 'Explicit entry, rebalance and liquidation costs', 'One-day execution-delay sensitivity'],
-        limitations=['Retrospective universe', 'Historical sample already used by source project',
+        limitations=['Retrospective 57-asset panel', 'No untouched post-2023 out-of-sample holdout',
                      'Idealized same-close execution in zero-delay variants', 'Funding, borrow fees and availability excluded',
                      'Missing prices carried forward for valuation, not evidence of executable fills',
                      'Dollar-neutral weights do not imply market-beta neutrality',

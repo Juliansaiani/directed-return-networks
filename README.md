@@ -3,7 +3,7 @@
 This project tests whether second-order antisymmetric path signatures (Lévy areas) computed over rolling 30-day return trajectories identify cross-asset lead-lag structure across `57` liquid Binance Spot (`USDT`) pairs over 2021–2023 (`1,095` daily `00:00 UTC` observations).
 
 - **Sensitivity to execution friction:** Daily rebalancing generates `1.90x NAV` daily turnover (~694x annualized). Net Sharpe is **1.38** at a `1.0 bp` passive maker fee, falling to `1.13` at `2.0 bps`, `0.36` at `5.0 bps`, and `-0.91` at `10.0 bps`, so viability depends on maker execution fees.
-- **Global ranking vs. spectral clustering:** The global leader/follower portfolio delivers **+177.22% Net** (1.38 Sharpe at `1.0 bp`). The spectral-clustering extension using absolute-degree Hermitian normalization underperformed at +1.63% Net (0.16 Sharpe at `1.0 bp`) and is kept as a negative result in [experiments/README.md](experiments/README.md).
+- **Global ranking vs. spectral clustering:** The global leader/follower portfolio delivers **+177.22% Net** (1.38 Sharpe at `1.0 bp`). I also tested a spectral-clustering extension using absolute-degree Hermitian normalization (`clustered` in [scores.csv](artifacts/scores.csv)), which fell to +1.63% Net (0.16 Sharpe at `1.0 bp`) because splitting a 57-coin cross-section into smaller sub-clusters amplified noise in the 30-day Lévy area estimates.
 
 ## Backtest Results & Transaction-Cost Sensitivity (`2021–2023`)
 
@@ -13,14 +13,14 @@ This project tests whether second-order antisymmetric path signatures (Lévy are
 | **Directed Return Network (Global)** | **0.5 bps (VIP Maker)** | +207.61% | +45.47% | 27.37% | **1.51** | -21.50% | 1.90x NAV |
 | **Directed Return Network (Global)** | **1.0 bp (Maker Baseline)** | **+177.22%** | **+40.51%** | **27.36%** | **1.38** | **-21.85%** | **1.90x NAV** |
 | **Directed Return Network (Global)** | **2.0 bps (Maker/Taker)** | +125.16% | +31.09% | 27.34% | **1.13** | -22.55% | 1.90x NAV |
-| **Directed Return Network (Global)** | **5.0 bps (Taker)** | — | +6.46% | — | **0.36** | -29.30% | 1.90x NAV |
-| **Directed Return Network (Global)** | **10.0 bps (High Friction)** | — | -24.75% | — | **-0.91** | -67.92% | 1.90x NAV |
+| **Directed Return Network (Global)** | **5.0 bps (Taker)** | +20.63% | +6.46% | 27.30% | **0.36** | -29.30% | 1.90x NAV |
+| **Directed Return Network (Global)** | **10.0 bps (High Friction)** | -57.37% | -24.75% | 27.28% | **-0.91** | -67.92% | 1.90x NAV |
 | **Clustered Spectral Variant** | **1.0 bp (Exploratory)** | +1.63% | +0.54% | 27.43% | **0.16** | -43.05% | 2.06x NAV |
 | **Large-Cap Crypto Index** | 62/26/12 (Annual Rebal, Drift) | +113.57% | +28.80% | 69.93% | 0.72 | -75.94% | — |
 | **Core Crypto Index** | 70/30 BTC/ETH (Annual Rebal, Drift) | +115.10% | +29.11% | 69.28% | 0.72 | -76.02% | — |
 | **Bitcoin** | Spot BTC (`100% Long`) | +46.19% | +13.50% | 64.87% | 0.52 | -76.63% | — |
 
-*(Primary institutional tiers `0.0–2.0 bps` are exported directly by `python -m directed_networks.research` into [scores.csv](artifacts/scores.csv); the `5.0` and `10.0 bps` sensitivities reflect higher-friction sweeps across the same `2021–2023` targets.)*
+*(All `0.0–10.0 bps` sweeps across both `global` and `clustered` specifications are exported into [scores.csv](artifacts/scores.csv).)*
 
 ![Cumulative Performance Across Crypto Market Regimes](artifacts/overview.png)
 
@@ -60,9 +60,9 @@ At `1.0 bp`, `2.56x` scaling yields **+779.8%** cumulative return (+106.5% CAGR,
 
 ## Modeling Assumptions, Data Provenance & Extensions
 
-- **Daily Close-Mark Accounting (`00:00 UTC`):** Signals computed at day-$t$ `00:00 UTC` close are valued at close-to-close transitions under passive Maker fee schedules (`1.0 bp` institutional prime-broker baseline). Modeling intraday limit-order fill rates, queue priority, and latency effects (`experiments.ipynb` shows 1-day delay degrades performance below zero) requires tick-level data.
+- **Daily Close-Mark Accounting (`00:00 UTC`):** Signals computed at day-$t$ `00:00 UTC` close are valued at close-to-close transitions under passive Maker fee schedules (`1.0 bp` institutional prime-broker baseline). Modeling intraday limit-order fill rates, queue priority, and latency requires tick-level data; adding a full 1-day execution delay removes net edge under daily turnover.
 - **Spot Short-Selling & Financing Scope:** Base-portfolio (`~+80.6% / -80.6%` netted, `1.61x` gross) short legs do not deduct historical exchange margin borrow rates, recall constraints, or perpetual funding rates.
-- **Annual-Rebalanced Baskets with Price Drift:** `Large-Cap Crypto Index` (`62% BTC / 26% ETH / 12%` equally across 8 altcoins) and `Core Crypto Index` (`70% BTC / 30% ETH`) reset target weights each January 1 and let constituent weights drift with daily price moves inside each year, computed on the same `00:00 UTC` Binance panel (`data/crypto_daily_panel.csv`, SHA-256 `6c99b9b7...`) rather than external float-adjusted market-cap indices.
+- **Universe & Custom Index Choice (`57` Pairs, `62/26/12` Drift):** Using the fixed `57`-pair Binance `USDT` spot panel from `2021–2023` keeps every cross-asset day aligned without missing futures rolls or surviving-index survivorship differences. Constructing `62% BTC / 26% ETH / 12%` altcoin (and `70/30` BTC/ETH) benchmarks on the exact same `00:00 UTC` closes with January 1 rebalancing and daily price drift ensures identical timestamp conventions against external market-cap indices.
 - **2023 Extension & Delistings (`81` missing terminal entries):** Rows through `2023-11-05` (`2,272` days) are extended by `56` days to `2023-12-31` via Binance Spot REST API (`GET /api/v3/klines`). Delisted symbols (`TOMO` after `2023-11-20`, `PERL` after `2023-12-07`, `BUSD` after `2023-12-15`) are excluded from lookback selection and forward-filled at 0% valuation (`3` stale held marks in 2023) strictly for accounting continuity.
 
 ## Reproducibility
@@ -77,7 +77,7 @@ python -m directed_networks.research          # primary global runs & artifacts
 python -m directed_networks.research --all    # includes spectral clustered variant
 ```
 
-Primary results are explored in [notebooks/research.ipynb](notebooks/research.ipynb); legacy sweeps and spectral clustering failures are documented in [notebooks/experiments.ipynb](notebooks/experiments.ipynb) and [experiments/README.md](experiments/README.md).
+All tables, fee sweeps (`0–10 bps`), and regime diagnostics can be inspected interactively in [notebooks/research.ipynb](notebooks/research.ipynb).
 
 ## License
 
