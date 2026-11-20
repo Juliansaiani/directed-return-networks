@@ -131,7 +131,7 @@ def run(root, include_clustered=False):
         valuation_gaps=int((prices.ffill().notna() & prices.isna()).sum().sum()), target_hashes=target_hashes,
         sharpe='Arithmetic mean daily portfolio return divided by sample standard deviation, annualized by sqrt(365.25); zero cash rate',
         uncertainty_method='Fixed-length 30-day circular block bootstrap (2,000 resamplings); quantifies sample variability without establishing cross-regime stationarity',
-        benchmark_methodology='100% long simple-return fixed-weight portfolios (Large-Cap Crypto Index: 62% BTC / 26% ETH / 12% across 8 large-caps [XRP, LTC, LINK, XLM, ADA, ATOM, EOS, TRX]; Core Crypto Index: 70% BTC / 30% ETH; Bitcoin: 100% BTC)',
+        benchmark_methodology='100% long annual-rebalanced (Jan 1) fixed-target baskets with intra-year price drift (Large-Cap Crypto Index: 62% BTC / 26% ETH / 12% across 8 large-caps [XRP, LTC, LINK, XLM, ADA, ATOM, EOS, TRX]; Core Crypto Index: 70% BTC / 30% ETH; Bitcoin: 100% BTC)',
         data_provenance=config.get('data_provenance', {}),
         changes=['Vectorized exact level-2 path areas', 'Absolute-degree Hermitian normalization',
                  'Market hedge universe observed at decision date', 'Explicit entry, rebalance and liquidation costs', 'One-day execution-delay sensitivity'],
@@ -157,6 +157,24 @@ def _series_stats(ret):
     return nav, dd, sharpe, cagr, tot, vol, float(dd.min())
 
 
+def _annual_rebalanced_basket(rets, target_weights):
+    """Simulate a 100% long basket reset on Jan 1 with daily price-driven weight drift."""
+    cols = list(target_weights.keys())
+    base = np.array([target_weights[c] for c in cols], dtype=float)
+    mat = rets[cols].to_numpy(dtype=float)
+    dates = rets.index
+    weights = base.copy()
+    out = np.empty(len(dates), dtype=float)
+    for i in range(len(dates)):
+        if i > 0 and dates[i].year != dates[i - 1].year:
+            weights = base.copy()
+        day_r = mat[i]
+        port_r = float(weights @ day_r)
+        out[i] = port_r
+        weights = weights * (1.0 + day_r) / (1.0 + port_r)
+    return out
+
+
 def compute_benchmarks(daily, prices):
     frame_gross = daily.query("mode == 'global' and cost_bps == 0 and extra_delay == 0").sort_values('date')
     if frame_gross.empty:
@@ -170,19 +188,20 @@ def compute_benchmarks(daily, prices):
     sub_ff = prices.loc[start_slice:dates[-1]].ffill()
     rets = sub_ff.pct_change(fill_method=None).reindex(dates).fillna(0.0)
 
-    # 1. Large-Cap Crypto Index (62% BTC, 26% ETH, 12% equally across 8 liquid large-caps in panel)
+    # 1. Large-Cap Crypto Index (62% BTC, 26% ETH, 12% across 8 altcoins; rebalanced Jan 1 with drift)
     lc_cols = [c for c in ['XRP', 'LTC', 'LINK', 'XLM', 'ADA', 'ATOM', 'EOS', 'TRX'] if c in rets.columns]
-    lc_ret = (0.62 * rets['BTC'] + 0.26 * rets['ETH'] + (0.12 / len(lc_cols)) * rets[lc_cols].sum(axis=1)).to_numpy()
+    lc_weights = {'BTC': 0.62, 'ETH': 0.26, **{c: 0.12 / len(lc_cols) for c in lc_cols}}
+    lc_ret = _annual_rebalanced_basket(rets, lc_weights)
 
-    # 2. Core Crypto Index (Cap-Weighted BTC / ETH 70/30)
-    core_ret = (0.70 * rets['BTC'] + 0.30 * rets['ETH']).to_numpy()
+    # 2. Core Crypto Index (70% BTC / 30% ETH; rebalanced Jan 1 with drift)
+    core_ret = _annual_rebalanced_basket(rets, {'BTC': 0.70, 'ETH': 0.30})
 
     # 3. Bitcoin (Spot Buy & Hold)
     btc_ret = rets['BTC'].to_numpy()
 
     specs = [
-        ('large_cap', 'Large-Cap Crypto Index', 'Cap-Weighted Large-Caps (100% Long)', lc_ret),
-        ('core_crypto', 'Core Crypto Index', 'Cap-Weighted BTC / ETH 70/30 (100% Long)', core_ret),
+        ('large_cap', 'Large-Cap Crypto Index', 'Annual Rebal 62/26/12 with Drift (100% Long)', lc_ret),
+        ('core_crypto', 'Core Crypto Index', 'Annual Rebal BTC / ETH 70/30 with Drift (100% Long)', core_ret),
         ('btc', 'Bitcoin', 'Spot Buy & Hold (100% Long)', btc_ret),
     ]
     rows, series = [], {}

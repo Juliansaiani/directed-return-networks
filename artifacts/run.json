@@ -58,7 +58,7 @@
   },
   "sharpe": "Arithmetic mean daily portfolio return divided by sample standard deviation, annualized by sqrt(365.25); zero cash rate",
   "uncertainty_method": "Fixed-length 30-day circular block bootstrap (2,000 resamplings); quantifies sample variability without establishing cross-regime stationarity",
-  "benchmark_methodology": "100% long simple-return fixed-weight portfolios (Large-Cap Crypto Index: 62% BTC / 26% ETH / 12% across 8 large-caps [XRP, LTC, LINK, XLM, ADA, ATOM, EOS, TRX]; Core Crypto Index: 70% BTC / 30% ETH; Bitcoin: 100% BTC)",
+  "benchmark_methodology": "100% long annual-rebalanced (Jan 1) fixed-target baskets with intra-year price drift (Large-Cap Crypto Index: 62% BTC / 26% ETH / 12% across 8 large-caps [XRP, LTC, LINK, XLM, ADA, ATOM, EOS, TRX]; Core Crypto Index: 70% BTC / 30% ETH; Bitcoin: 100% BTC)",
   "data_provenance": {
     "quote_currency": "USDT",
     "price_definition": "00:00 UTC daily Spot close (Binance 1d kline close)",

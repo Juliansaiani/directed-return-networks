@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from directed_networks.signals import levy_matrix, normalized_hermitian, target_weights
-from directed_networks.research import build_targets
+from directed_networks.research import build_targets, _annual_rebalanced_basket
 from directed_networks.backtest import simulate, cost_fraction
 
 
@@ -91,3 +91,14 @@ def test_nonzero_holdings_with_no_valuation_are_rejected():
     targets = pd.DataFrame({'A':[.5,.5,0], 'B':[-.5,-.5,0]},index=p.index)
     with pytest.raises(ValueError,match='valuation'):
         simulate(p,targets)
+
+
+def test_annual_rebalanced_basket_drifts_intra_year_and_resets_jan_1():
+    dates = pd.to_datetime(['2021-12-30', '2021-12-31', '2022-01-01', '2022-01-02'])
+    rets = pd.DataFrame({'A': [1.0, 0.0, 0.1, 0.0], 'B': [0.0, 0.5, 0.0, 0.2]}, index=dates)
+    basket = _annual_rebalanced_basket(rets, {'A': 0.5, 'B': 0.5})
+    assert basket[0] == pytest.approx(0.5)
+    # After day 0 (+100% on A, 0% on B), drifted weights are 2/3 A and 1/3 B.
+    assert basket[1] == pytest.approx((1.0 / 3.0) * 0.5)
+    # On 2022-01-01 weights reset to 0.5 / 0.5 before applying day 2 returns.
+    assert basket[2] == pytest.approx(0.05)
